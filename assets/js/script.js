@@ -1,6 +1,6 @@
 // --- Global Variables ---
 let ortSession2yrs;
-let ortSession5yrs; // Add 5-year session back
+let ortSession5yrs;
 let isPredicting = false;
 
 // --- DOM Elements ---
@@ -26,6 +26,7 @@ const inputIds = [
 ];
 
 // Map for output classes
+// Index 0 = Survival, Index 1 = TKA, Index 2 = HTO
 const CLASS_NAMES = ['Survival', 'TKA', 'HTO'];
 
 // --- Initialization ---
@@ -50,7 +51,7 @@ async function main() {
         console.log('2-Year and 5-Year models loaded successfully.');
         statusAlert.classList.remove('alert-info');
         statusAlert.classList.add('alert-success');
-        statusAlert.innerHTML = 'Models loaded successfully. Ready to predict.'; // Restore original message
+        statusAlert.innerHTML = 'Models loaded successfully. Ready to predict.';
         predictBtn.disabled = false;
 
     } catch (error) {
@@ -107,7 +108,7 @@ async function handlePrediction() {
         const result2yrs = getPrediction(outputData2yrs);
         const result5yrs = getPrediction(outputData5yrs);
 
-        displayResult(result2yrs, result5yrs); // Pass 5-year result again
+        displayResult(result2yrs, result5yrs);
 
     } catch (error) {
         console.error('Error during prediction:', error);
@@ -121,6 +122,7 @@ async function handlePrediction() {
 
 /**
  * Gets and validates all 10 input fields.
+ * @returns {number[]|null} An array of float values, or null if validation fails.
  */
 function getInputs() {
     const inputs = [];
@@ -148,55 +150,139 @@ function getInputs() {
 }
 
 /**
- * Processes model output data (logits) to get a prediction.
+ * Processes model output data (logits) to get detailed predictions.
+ * @param {Float32Array} outputData - The raw output logits from the model [logit_S, logit_T, logit_H].
+ * @returns {object} An object with detailed prediction info.
  */
 function getPrediction(outputData) {
-    const probabilities = softmax(Array.from(outputData));
-    const confidence = Math.max(...probabilities);
-    const predictedIndex = probabilities.indexOf(confidence);
-    return { predictedIndex, confidence };
+    // 1. Get 3-class (Subgroup) probabilities
+    const subgroupProbs = softmax(Array.from(outputData));
+    const probSurvival = subgroupProbs[0];
+    const probTKA = subgroupProbs[1];
+    const probHTO = subgroupProbs[2];
+
+    // 2. Get 2-class (Group) probabilities
+    const groupInput_Fail = Math.max(probTKA, probHTO);
+    const groupInput_Survival = probSurvival;
+    const groupProbs = softmax([groupInput_Fail, groupInput_Survival]);
+    const probGroupFail = groupProbs[0];
+    const probGroupSurvival = groupProbs[1];
+
+    // 3. Determine the primary prediction
+    const overallMaxProb = Math.max(probSurvival, probTKA, probHTO);
+    const primaryIndex = subgroupProbs.indexOf(overallMaxProb); // 0, 1, or 2
+    const primaryClass = CLASS_NAMES[primaryIndex]; // 'Survival', 'TKA', or 'HTO'
+
+    // 4. Calculate Fail subclass probabilities (TKA vs HTO)
+    let failSubclassProbs = null;
+    // Apply softmax *only* to the TKA and HTO logits
+    const failLogits = [outputData[1], outputData[2]]; // [logit_TKA, logit_HTO]
+    const failProbs = softmax(failLogits); // [prob_TKA_given_Fail, prob_HTO_given_Fail]
+    
+    failSubclassProbs = {
+        tka: failProbs[0], // P(TKA | Fail)
+        hto: failProbs[1]  // P(HTO | Fail)
+    };
+
+    // 5. Return all computed values
+    return {
+        primaryClass: primaryClass, // 'Survival', 'TKA', or 'HTO'
+        primaryIndex: primaryIndex, // 0, 1, or 2
+        probGroupSurvival: probGroupSurvival,
+        probGroupFail: probGroupFail,
+        failSubclassProbs: failSubclassProbs // {tka: number, hto: number}
+    };
+}
+
+
+/**
+ * Helper function to format the text for a single result (2-yr or 5-yr).
+ * @param {object} result - The detailed prediction object from getPrediction().
+ * @returns {object} An object containing {classString, probStringMain, probStringSub}.
+ */
+function formatResultStrings(result) {
+    let classString = '';
+    let probStringMain = '';
+    let probStringSub = null; // Use null for survival
+    const colorClass = getResultColor(result.primaryIndex);
+
+    if (result.primaryClass === 'Survival') {
+        // --- Class String for Survival ---
+        classString = `<span class="${colorClass} fw-bold">Survival</span>`;
+        
+        // --- Prob String for Survival ---
+        probStringMain = `${(result.probGroupSurvival * 100).toFixed(1)}%`;
+        // probStringSub remains null
+
+    } else {
+        // --- Class String for Fail ---
+        classString = `<span class="${colorClass} fw-bold">Fail (${result.primaryClass})</span>`;
+        
+        // --- Prob String Main for Fail ---
+        probStringMain = `${(result.probGroupFail * 100).toFixed(1)}%`;
+        
+        // --- Prob String Sub for Fail ---
+        const htoProb = (result.failSubclassProbs.hto * 100).toFixed(1);
+        const tkaProb = (result.failSubclassProbs.tka * 100).toFixed(1);
+        // Format: "82.3% HTO / 17.7% TKA"
+        probStringSub = `${htoProb}% HTO / ${tkaProb}% TKA`;
+    }
+    
+    return { classString, probStringMain, probStringSub };
 }
 
 /**
  * Displays the two prediction results in the UI.
- * (Modified to show 5-year result again)
+ * @param {object} result2yrs - The 2-year prediction object from getPrediction().
+ * @param {object} result5yrs - The 5-year prediction object from getPrediction().
  */
 function displayResult(result2yrs, result5yrs) {
     
-    const class2yrs = CLASS_NAMES[result2yrs.predictedIndex] || 'Unknown';
-    const class5yrs = CLASS_NAMES[result5yrs.predictedIndex] || 'Unknown';
-    
-    const conf2yrs = (result2yrs.confidence * 100).toFixed(1);
-    const conf5yrs = (result5yrs.confidence * 100).toFixed(1);
+    const formatted2yrs = formatResultStrings(result2yrs);
+    const formatted5yrs = formatResultStrings(result5yrs);
 
-    // Get color classes
-    const colorClass2yrs = getResultColor(result2yrs.predictedIndex);
-    const colorClass5yrs = getResultColor(result5yrs.predictedIndex);
-
-    // Restore HTML to show 5-year result
+    // Update the result card text (Example: 2-Year: Survival)
     resultText.innerHTML = `
-        2-Year: <span class="${colorClass2yrs} fw-bold">${class2yrs}</span>
+        2-Year: ${formatted2yrs.classString}
         <br>
-        5-Year: <span class="${colorClass5yrs} fw-bold">${class5yrs}</span>
+        5-Year: ${formatted5yrs.classString}
     `;
     
-    // Restore text to show 5-year result
-    resultProb.textContent = `Confidence: ${conf2yrs}% (2-Year) / ${conf5yrs}% (5-Year)`;
+    // Build the 2-Year confidence string
+    let confString2yrs = `${formatted2yrs.probStringMain} (2-Year`;
+    if (formatted2yrs.probStringSub) {
+        // Fail case: Add ", 82.3% HTO / 17.7% TKA"
+        confString2yrs += `, ${formatted2yrs.probStringSub}`;
+    }
+    confString2yrs += `)`; // Close parenthesis
+
+    // Build the 5-Year confidence string
+    let confString5yrs = `${formatted5yrs.probStringMain} (5-Year`;
+    if (formatted5yrs.probStringSub) {
+        // Fail case: Add ", 82.3% HTO / 17.7% TKA"
+        confString5yrs += `, ${formatted5yrs.probStringSub}`;
+    }
+    confString5yrs += `)`; // Close parenthesis
+
+    // Update the probability text
+    resultProb.textContent = `Confidence: ${confString2yrs} / ${confString5yrs}`;
 
     resultCard.style.display = 'block';
 }
 
 /**
  * Returns a Bootstrap text color class based on the prediction index.
+ * @param {number} predictedIndex - The index of the predicted class (0, 1, or 2).
+ * @returns {string} A Bootstrap color class.
  */
 function getResultColor(predictedIndex) {
     switch (predictedIndex) {
         case 0: // Survival
             return 'text-success';
         case 1: // TKA
-            return 'text-warning';
-        case 2: // HTO
             return 'text-danger';
+        case 2: // HTO
+            return 'text-warning';
         default:
             return 'text-dark';
     }
@@ -204,6 +290,8 @@ function getResultColor(predictedIndex) {
 
 /**
  * Computes softmax for an array of numbers (logits).
+ * @param {number[]} arr - An array of logits from the model output.
+ * @returns {number[]} An array of probabilities.
  */
 function softmax(arr) {
     const maxLogit = Math.max(...arr);
@@ -214,6 +302,7 @@ function softmax(arr) {
 
 /**
  * Sets the loading state of the prediction button.
+ * @param {boolean} isLoading - True to show spinner, false to show text.
  */
 function setButtonLoading(isLoading) {
     if (isLoading) {
@@ -227,6 +316,7 @@ function setButtonLoading(isLoading) {
 
 /**
  * Shows a temporary error message in the status alert box.
+ * @param {string} message - The error message to display.
  */
 function showTemporaryError(message) {
     statusAlert.classList.remove('alert-success');
