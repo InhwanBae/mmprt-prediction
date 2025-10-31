@@ -1,15 +1,37 @@
-body {
-    background-color: #f8f9fa; /* Light gray background */
-}
-
-.container {
+.container-left {
     max-width: 900px;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
+    margin-left: auto;
+    margin-right: auto;
     background-color: #ffffff;
     padding: 2.5rem;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    margin-bottom: 1rem;
+}
+
+.container-right {
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #ffffff;
+    padding: 2.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    margin-bottom: 1rem;
+}
+
+body {
+    background-color: #f8f9fa;
+}
+
+@media (min-width: 992px) {
+    #input-column,
+    #results-column {
+        height: calc(100vh - 3rem); 
+        overflow-y: auto;
+        position: sticky;
+        display: sticky;
+    }
 }
 
 h1 {
@@ -23,7 +45,6 @@ h1 {
     margin-top: 1rem;
 }
 
-/* Custom styles for the result card */
 #result-card .card-header {
     font-weight: 500;
 }
@@ -33,7 +54,6 @@ h1 {
     font-size: 2rem;
 }
 
-/* Custom class for the loading spinner on the button */
 .spinner {
     display: inline-block;
     width: 1rem;
