@@ -1,0 +1,15 @@
+# This file contains known mappings for categorical columns to numerical values.
+
+mappings:
+  Group:
+    fail: 0
+    survival: 1
+
+  Subgroup:
+    survival: 0
+    TKA: 1
+    HTO: 2
+
+  Sex:
+    M: 0
+    F: 1

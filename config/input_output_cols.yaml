@@ -1,0 +1,32 @@
+# Configuration file specifying input and output columns for the model.
+
+input_columns:
+  - Age
+  - Sex
+  - Height
+  - Weight
+  - BMI
+  - Sx_duration
+  - Chronicity
+  - Injury_mechanism
+  - Pre_mHKA
+  - Pre_MPTA
+  - Pre_LDFA
+  - Pre_JLCA
+  - Pre_slope
+  - Pre_KL
+  - MJW_extension
+  - MJW_flexion
+  - ICRS
+  - Shinycorner
+  - MME_absolute
+  - MME_relative
+  - Lat_PTS_MRI
+  - Med_PTS_MRI
+  - Effusion
+  - BME
+  - SIFK
+
+output_columns:
+  - Group
+  - Subgroup
