@@ -56,6 +56,11 @@ if exist "utils\requirements.txt" (
     )
 ) else (
     echo requirements file not found: utils\requirements.txt
+    popd
+    echo.
+    echo Error occurred. Press any key to exit.
+    pause > nul
+    exit /b 1
 )
 
 echo Setup complete.
