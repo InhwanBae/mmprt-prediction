@@ -1,6 +1,7 @@
 @echo off
 
 cd /d "%~dp0"
+echo Running Deep Learning Model Training and Testing...
 call .venv\Scripts\activate
 python train_test_DL_models.py
 ::deactivate

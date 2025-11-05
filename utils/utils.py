@@ -3,6 +3,7 @@ import glob
 import yaml
 import numpy as np
 import pandas as pd
+from tqdm import tqdm
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import (
@@ -71,7 +72,7 @@ def prepare_data(test_size=0.2, seed=0):
     assert len(all_files) > 0, f'No CSV files found in data directory: {DATA_DIR}'
 
     df_list = []
-    for file in all_files:
+    for file in tqdm(all_files, desc="Loading CSV files"):
         df = pd.read_csv(file).fillna(-1)
         filename = os.path.basename(file).replace('.csv', '')
         df['Source_File'] = filename
