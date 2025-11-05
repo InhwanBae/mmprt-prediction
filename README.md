@@ -38,6 +38,8 @@ You can train and test your own models using the provided code. Follow the instr
 
 ### Environment Setup
 
+[video-instruction-setup.webm](https://github.com/user-attachments/assets/03d2ba80-a6d1-4530-aea3-2df8a481f106)
+
 **1. Install Python 3.11**
   - In your browser, download the ["Python 3.11 installer"](https://www.python.org/ftp/python/3.11.9/python-3.11.9-amd64.exe) from the official website.
   - Run the installer. Crucially, check the box for "Add python.exe to PATH" and then choose "Install Now".
@@ -81,6 +83,9 @@ You can train and test your own models using the provided code. Follow the instr
 <br>
 
 ### Data Preparation and Model Training
+
+[video-instruction-train.webm](https://github.com/user-attachments/assets/4e19dfe2-5158-49bd-a4f8-a2a9d575a1ea)
+
 
 **4. Prepare your data**
   - Place your CSV data file(s) in the `data` folder.
