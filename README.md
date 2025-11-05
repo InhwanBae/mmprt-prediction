@@ -1,4 +1,4 @@
-<h2 align="center">Deep-Learning Based MMPRT Prediction</h2>
+<h2 align="center">AI-Based Prediction of Prognosis Following Nonoperative Treatment for Medial Meniscus Posterior Root Tear</h2>
 <!-- <p align="center">
   <a href="https://InhwanBae.github.io/"><strong>Inhwan Bae</strong></a>
   ·  
@@ -87,7 +87,7 @@ You can train and test your own models using the provided code. Follow the instr
 [Video_instruction_for_data_preparation_and_model_training.webm](https://github.com/user-attachments/assets/5689c5d2-8887-4347-9d87-ba6e5d7e7974)
 
 **4. Prepare your data**
-  - Place your CSV data file(s) in the `data` folder.
+  - Place your CSV data file(s) in the `data` folder. All CSV files in this folder will be automatically detected and gathered for training and testing the models. If you don't want to use certain files, simply remove them from this folder, or move to `not_used` folder.
   - Check the configuration files in the `config` folder to match your dataset's schema.
     - `config/input_output_cols.yaml`: Define the model's input and output columns.
     - `config/group_cols.yaml`: Specify column groupings used by the deep learning model.
