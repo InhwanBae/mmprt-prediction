@@ -31,7 +31,7 @@ For a live demonstration, you can directly use the pre-trained deep-learning mod
 
 ## Training your own models
 You can train and test your own models using the provided code. Follow the instructions below.
-  - [**`Environment Setup (Windows)`**](#environment-setup-windows): Instructions to set up environment.
+  - [**`Environment Setup`**](#environment-setup): Instructions to set up environment.
   - [**`Data Preparation and Model Training`**](#data-preparation-and-model-training): Instructions to evaluate models with your own data.
 
 <br>
