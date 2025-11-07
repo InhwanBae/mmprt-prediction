@@ -17,15 +17,10 @@
 
 <div align='center'>
   <br><img src="assets/img/figure-web-application.png" width=100% href="https://inhwanbae.github.io/mmprt-prediction/">
-  <br><em>Screenshot of the online MMPRT prediction service.</em>
+  <br><em>Screenshot of the MMPRT prediction service.</em>
 </div>
 
-<br>This repository provides the source code for training and testing machine learning and deep learning models to predict Medial Meniscus Posterior Root Tear (MMPRT) using patient demographic data and measurements.
-
-<br>
-
-## Model Inference
-For a live demonstration, you can directly use the pre-trained deep-learning models on our [**Web Application**](https://inhwanbae.github.io/mmprt-prediction/)
+<br>This repository provides the source code for training and testing machine learning and deep learning models to predict Medial Meniscus Posterior Root Tear (MMPRT) using patient demographic data and measurements. All models are trained and evaluated on your local machine, and the provided code is open source and free to use for any purpose.
 
 <br>
 
