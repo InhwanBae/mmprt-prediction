@@ -10,7 +10,7 @@
 </p> -->
 
 <p align="center">
-  <a href="https://inhwanbae.github.io/mmprt-prediction/"><strong><code>Web Application</code></strong></a>
+  <a href="https://inhwanbae.github.io/ai-mmprt/"><strong><code>Web Application</code></strong></a>
   <a href="#"><strong><code>Publication</code></strong></a>
   <a href="https://github.com/InhwanBae/mmprt-prediction"><strong><code>Source Code</code></strong></a>
 </p>
