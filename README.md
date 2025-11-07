@@ -34,6 +34,9 @@ You can train and test your own models using the provided code. Follow the instr
   - [**`Environment Setup`**](#environment-setup): Instructions to set up environment.
   - [**`Data Preparation and Model Training`**](#data-preparation-and-model-training): Instructions to evaluate models with your own data.
 
+> [!NOTE]
+> If you are using MacOS or Linux, please refer to the manual steps provided in the details sections. Click on *"Manual way (optional)"* to expand the instructions.
+
 <br>
 
 ### Environment Setup
@@ -41,14 +44,26 @@ You can train and test your own models using the provided code. Follow the instr
 [Video_instruction_for_environment_setup.webm](https://github.com/user-attachments/assets/78af4f0b-acaa-4eda-9e9b-d5845857cc9b)
 
 **1. Install Python 3.11**
-  - In your browser, download the ["Python 3.11 installer"](https://www.python.org/ftp/python/3.11.9/python-3.11.9-amd64.exe) from the official website.
+  - In your browser, download the ["Python 3.11 Windows Installer"](https://www.python.org/ftp/python/3.11.9/python-3.11.9-amd64.exe) from the official website.
+
+    <details>
+      <summary><code>Manual way (optional)</code></summary>
+
+    - If you are using MacOS, download the the ["Python 3.11 macOS Installer"](https://www.python.org/ftp/python/3.11.9/python-3.11.9-macos11.pkg) from the [official website](https://www.python.org/downloads/release/python-3119/).
+    - If you are using Linux, you can install Python 3.11 using your package manager. For example, on Ubuntu, you can run:
+      ```bash
+      sudo apt update
+      sudo apt install python3.11
+      ```
+    </details>
+
   - Run the installer. Crucially, check the box for "Add python.exe to PATH" and then choose "Install Now".
 
 **2. Download the source code**
   - In your browser, download the source code from the official ["GitHub Repository"](https://github.com/InhwanBae/mmprt-prediction/archive/refs/heads/main.zip).
 
     <details>
-      <summary>Manual way (optional)</summary>
+      <summary><code>Manual way (optional)</code></summary>
     Alternatively, you can follow these steps:
     
     - In your browser, go to: https://github.com/InhwanBae/mmprt-prediction
@@ -62,7 +77,7 @@ You can train and test your own models using the provided code. Follow the instr
   - To prepare the Python environment: Double-click `Setup_Environment.bat`.
   
     <details>
-      <summary>Manual way (optional)</summary>
+      <summary><code>Manual way (optional)</code></summary>
       
     Alternatively, you can manually set up the environment:<br>
     
@@ -98,7 +113,7 @@ You can train and test your own models using the provided code. Follow the instr
   - To train and test Deep Learning models: Double-click `Run_Deep_Learning.bat`.
   
     <details>
-      <summary>Manual way (optional)</summary>
+      <summary><code>Manual way (optional)</code></summary>
 
     Alternatively, you can run the following command in Command Prompt:
     
