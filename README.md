@@ -16,7 +16,7 @@
 </p>
 
 <div align='center'>
-  <br><img src="assets/img/figure-web-application.png" width=100% href="https://inhwanbae.github.io/mmprt-prediction/">
+  <br><img src="https://github.com/user-attachments/assets/00143d37-9712-43e7-947d-cc0940280fc8" width=100% href="https://inhwanbae.github.io/mmprt-prediction/">
   <br><em>Screenshot of the MMPRT prediction service.</em>
 </div>
 
